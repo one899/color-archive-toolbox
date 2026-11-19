@@ -1,0 +1,16 @@
+{
+  "name": "color-archive-toolbox",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Open device workbench with WebUSB terminals and appearance controls",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "audit": "node tools/audit-public.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

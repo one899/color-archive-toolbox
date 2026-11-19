@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a0c">
+  <title data-en="Web Device Toolbox · Color Archive">网页设备工具箱 · Color Archive</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="toolbox.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to main content">跳到主要内容</a>
+  <header class="site-header">
+    <div class="shell site-nav">
+      <div class="site-identity">
+        <a class="site-home" id="siteHome" href="./"
+           aria-label="返回官网 · Color Archive" data-en-label="Main site · Color Archive">
+          <img src="./assets/logo.png" alt="" width="693" height="250">
+        </a>
+        <h1 data-en="Device Toolbox">设备工具箱</h1>
+      </div>
+      <div class="site-actions">
+        <button class="button appearance-trigger" id="appearanceButton" type="button" aria-haspopup="dialog" data-en="Appearance">外观</button>
+        <a class="language-link" id="languageSwitch" href="?lang=en" lang="en" hreflang="en"
+           aria-label="切换到 English" data-en-label="Switch to Chinese (中文)">English</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell main workbench" id="main" tabindex="-1">
+    <aside class="workbench-rail">
+      <div class="rail-heading">
+        <span data-en="Workbench">工作台</span>
+        <button class="rail-toggle" id="railToggle" type="button" aria-controls="workbenchNav" aria-expanded="true"
+                aria-label="收起侧栏" data-en-label="Collapse sidebar">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+      <nav class="workbench-nav" id="workbenchNav" aria-label="工作台导航" data-en-label="Workbench navigation">
+        <button class="nav-item" type="button" data-view="device" aria-controls="view-device" aria-current="page">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18h4"/></svg><span data-en="Device">设备</span>
+        </button>
+        <button class="nav-item" type="button" data-view="terminal" aria-controls="view-terminal">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.8" y="4.5" width="18.4" height="15" rx="2.5"/><path d="m6.5 9 3 3-3 3m6 0H17"/></svg><span data-en="Terminal">终端</span>
+        </button>
+        <button class="nav-item" type="button" data-view="activity" aria-controls="view-activity">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 6h13M7 12h13M7 18h13M3.6 6h.01M3.6 12h.01M3.6 18h.01"/></svg><span data-en="Activity">操作日志</span>
+        </button>
+      </nav>
+      <p class="rail-note"><span class="local-dot" aria-hidden="true"></span><span data-en="Direct USB connection">本地 USB 连接</span></p>
+    </aside>
+
+    <div class="workbench-body">
+      <p class="support-notice" id="supportNotice" hidden
+         data-en="Checking whether this browser supports WebUSB.">正在检查浏览器是否支持 WebUSB。</p>
+
+      <section class="panel device-strip" aria-labelledby="deviceName">
+        <div class="device-overview">
+          <div class="device-glyph"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18h4"/></svg></div>
+          <div class="device-identity">
+            <p class="connection-state" id="connectionStatus" data-en="Not connected">未连接</p>
+            <p class="device-name" id="deviceName" data-en="No device">无设备</p>
+          </div>
+          <dl class="strip-facts">
+            <div><dt data-en="Mode">设备模式</dt><dd id="deviceMode">—</dd></div>
+            <div><dt id="slotLabel" data-en="Slot">槽位</dt><dd id="deviceSlot">—</dd></div>
+          </dl>
+        </div>
+        <div class="actions device-connect">
+            <button class="button button--primary" id="connectButton" type="button" disabled>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22v-5M9 8V3m6 5V3m3 5v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8M4 8h16"/></svg>
+              <span data-en="Connect Fastboot">连接 Fastboot</span>
+            </button>
+            <button class="button" id="connectAdbButton" type="button" disabled>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+              <span data-en="Connect ADB">连接 ADB</span>
+            </button>
+            <button class="button" id="disconnectButton" type="button" disabled>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m18 6-12 12M6 6l12 12"/></svg>
+              <span data-en="Disconnect">断开连接</span>
+            </button>
+        </div>
+      </section>
+      <div class="operation-row workbench-status">
+        <span data-en="Status">状态</span>
+        <p id="operationStatus" role="status" data-en="Waiting for an action">等待操作</p>
+      </div>
+
+      <section class="workbench-view" id="view-device" aria-labelledby="deviceTitle">
+        <header class="view-heading">
+          <h2 id="deviceTitle" data-en="Device overview">设备概览</h2>
+          <p class="hint" data-en="Use Android shell, Fastboot / fastbootd queries, and confirmed device controls.">支持 Android Shell、FB / FBD 查询和经确认的设备操作。</p>
+        </header>
+        <div class="device-grid">
+          <section class="step panel" aria-labelledby="deviceInfoTitle">
+            <header class="panel-heading">
+              <h3 id="deviceInfoTitle" data-en="Device information">设备信息</h3>
+            <button class="button" id="readDeviceButton" type="button" disabled>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 7v5h-5M4 17v-5h5M6.2 6.2A8 8 0 0 1 20 12M4 12a8 8 0 0 0 13.8 5.8"/></svg>
+              <span data-en="Refresh status">读取状态</span>
+            </button>
+            </header>
+            <dl class="details device-details">
+              <div><dt data-en="USB ID">USB ID</dt><dd id="deviceUsbId">—</dd></div>
+              <div><dt data-en="USB serial">USB 序列号</dt><dd id="deviceSerial">—</dd></div>
+              <div><dt data-en="Android model">系统机型</dt><dd id="deviceModel">—</dd></div>
+              <div><dt data-en="Android version">Android 版本</dt><dd id="deviceAndroid">—</dd></div>
+            </dl>
+            <p class="hint" id="deviceHelp" data-en="Unlock the phone, turn on USB debugging and approve the prompt to use ADB.">使用 ADB 时，请解锁手机、开启 USB 调试并确认授权。</p>
+          </section>
+          <section class="step panel" aria-labelledby="deviceControlsTitle">
+            <h3 id="deviceControlsTitle" data-en="Device controls">设备操作</h3>
+          <div class="actions reboot-controls">
+            <label class="sr-only" for="rebootTarget" data-en="Reboot destination">重启目标</label>
+            <select class="control-select" id="rebootTarget" disabled>
+              <option value="" data-en="Choose reboot target">选择重启目标</option>
+              <option value="system" data-en="Android system">Android 系统</option>
+              <option value="bootloader" data-en="Bootloader (FB)">Bootloader（FB）</option>
+              <option value="fastbootd" data-en="fastbootd (FBD)">fastbootd（FBD）</option>
+              <option value="recovery" data-en="Recovery (REC)">Recovery（REC）</option>
+              <option value="edl" data-en="9008 / EDL (device dependent)">9008 / EDL（视设备而定）</option>
+            </select>
+            <button class="button" id="rebootButton" type="button" disabled>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+              <span data-en="Review reboot">确认重启目标</span>
+            </button>
+          </div>
+            <div class="slot-controls" role="group" aria-label="切换活动槽" data-en-label="Switch active slot">
+              <button class="button" id="slotAButton" type="button" disabled data-en="Switch to A">切到 A 槽</button>
+              <button class="button" id="slotBButton" type="button" disabled data-en="Switch to B">切到 B 槽</button>
+            </div>
+          <p class="hint" id="slotHint" data-en="Switching the active slot requires Fastboot.">切换活动槽需要 Fastboot。</p>
+          </section>
+          <section class="step panel device-adb" aria-labelledby="adbToolsTitle">
+            <div class="panel-heading">
+              <h3 id="adbToolsTitle" data-en="Quick commands">快捷指令</h3>
+              <button class="button" id="openAdbView" type="button"><span data-en="Open terminal">打开终端</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.8" y="4.5" width="18.4" height="15" rx="2.5"/><path d="m6.5 9 3 3-3 3m6 0H17"/></svg></button>
+            </div>
+            <div class="actions" data-command-mode="adb" hidden>
+              <button class="button" type="button" data-adb-preset="system" data-en="System info" disabled>系统信息</button>
+              <button class="button" type="button" data-adb-preset="storage" data-en="Storage" disabled>存储空间</button>
+              <button class="button" type="button" data-adb-preset="recentLogs" data-en="Recent logcat" disabled>最近 logcat</button>
+            </div>
+            <div class="actions" data-command-mode="fastboot" hidden>
+              <button class="button" type="button" data-fastboot-preset="product" data-en="Product" disabled>设备代号</button>
+              <button class="button" type="button" data-fastboot-preset="current-slot" data-en="Active slot" disabled>活动槽</button>
+              <button class="button" type="button" data-fastboot-preset="all" data-en="All variables" disabled>全部变量</button>
+            </div>
+            <p class="hint" id="adbQuickHint" data-en="Connect a device over USB to see the available commands.">通过 USB 连接设备后显示对应指令。</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="workbench-view" id="view-terminal" aria-labelledby="adbTitle" hidden>
+        <header class="view-heading">
+          <h2 id="adbTitle" tabindex="-1" data-en="Terminal">终端</h2>
+        </header>
+        <section class="panel terminal-panel" aria-labelledby="adbTitle">
+          <div class="terminal-heading">
+            <div class="terminal-label"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.8" y="4.5" width="18.4" height="15" rx="2.5"/><path d="m6.5 9 3 3-3 3m6 0H17"/></svg><span id="consoleMode">USB</span></div>
+            <div class="actions terminal-tools">
+              <button class="button" id="adbCopy" type="button" data-en="Copy output" disabled>复制输出</button>
+              <button class="button" id="adbClear" type="button" data-en="Clear" disabled>清空</button>
+            </div>
+          </div>
+          <form class="terminal-form" id="adbForm" autocomplete="off" method="post">
+            <label class="terminal-prompt" for="adbCommand"><span id="consolePrompt" aria-hidden="true">›</span><span class="sr-only" data-en="Device command">设备指令</span></label>
+            <input id="adbCommand" type="text" placeholder="连接设备后输入指令" data-en-placeholder="Connect a device to enter commands"
+                   maxlength="2048" autocapitalize="off" spellcheck="false" enterkeyhint="go" aria-describedby="adbHelp" required disabled>
+            <button class="button button--primary" id="adbRun" type="submit" data-en="Run" disabled>执行</button>
+            <button class="button" id="adbStop" type="button" data-en="Stop" disabled>停止</button>
+          </form>
+          <div class="terminal-screen" id="adbScreen" tabindex="0" role="region" aria-label="设备指令输出" data-en-label="Device command output">
+            <pre id="adbOutput" class="terminal-output"></pre>
+            <p class="terminal-empty" data-en="No output yet. Run a command or choose a shortcut below.">还没有输出。请执行命令，或选择下方的快捷操作。</p>
+          </div>
+          <div class="terminal-meta">
+            <p class="hint" id="adbConsoleStatus" role="status" data-en="Connect a device over USB.">请先通过 USB 连接设备。</p>
+            <div class="actions terminal-presets" data-command-mode="adb" hidden>
+              <button class="button" type="button" data-adb-preset="identity" disabled>id</button>
+              <button class="button" type="button" data-adb-preset="system" data-en="System info" disabled>系统信息</button>
+              <button class="button" type="button" data-adb-preset="recentLogs" data-en="Recent logcat" disabled>最近 logcat</button>
+              <button class="button" type="button" data-adb-preset="liveLogs" data-en="Live logcat" disabled>实时 logcat</button>
+            </div>
+            <div class="actions terminal-presets" data-command-mode="fastboot" hidden>
+              <button class="button" type="button" data-fastboot-preset="product" disabled>getvar product</button>
+              <button class="button" type="button" data-fastboot-preset="is-userspace" disabled>getvar is-userspace</button>
+              <button class="button" type="button" data-fastboot-preset="all" disabled>getvar all</button>
+            </div>
+            <p class="hint" id="adbHelp" data-en="Command output stays in this browser.">指令输出保留在当前浏览器。</p>
+          </div>
+        </section>
+      </section>
+
+      <div class="workbench-view" id="view-activity" hidden>
+          <section class="log-panel" aria-labelledby="logTitle">
+            <header class="log-heading">
+              <h2 id="logTitle" data-en="Activity log">操作日志</h2>
+              <button class="button" id="clearLogButton" type="button">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M19 6v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6m3 0V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m-6 4v7m4-7v7"/></svg>
+                <span data-en="Clear log">清空日志</span>
+              </button>
+            </header>
+            <div class="log-output">
+              <ol class="log-list" id="logEntries" tabindex="0" aria-labelledby="logTitle"></ol>
+              <p class="log-empty" data-en="No activity yet.">暂无操作记录。</p>
+            </div>
+          </section>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="confirm-dialog appearance-dialog" id="appearanceDialog" aria-labelledby="appearanceTitle">
+    <h2 id="appearanceTitle" data-en="Appearance">外观</h2>
+    <fieldset class="appearance-options">
+      <legend data-en="Color mode">颜色模式</legend>
+      <label><input type="radio" name="toolbox-scheme" value="system" checked><span data-en="System">跟随系统</span></label>
+      <label><input type="radio" name="toolbox-scheme" value="light"><span data-en="Light">浅色</span></label>
+      <label><input type="radio" name="toolbox-scheme" value="dark"><span data-en="Dark">深色</span></label>
+    </fieldset>
+    <div class="appearance-colors">
+      <div class="appearance-field">
+        <label for="themeColor" data-en="Theme color">主题色</label>
+        <div class="appearance-value">
+          <input id="themeColor" type="color" value="#426d8c" aria-describedby="themeColorHint">
+          <input id="themeHex" type="text" inputmode="text" spellcheck="false" maxlength="7" aria-label="主题色 HEX" data-en-label="Theme color hex" aria-describedby="themeColorHint" autocomplete="off">
+        </div>
+        <p class="hint" id="themeColorHint" data-en="Background and panels">背景和面板</p>
+      </div>
+      <div class="appearance-field">
+        <label for="accentColor" data-en="Accent color">强调色</label>
+        <div class="appearance-value">
+          <input id="accentColor" type="color" value="#6ca7d4" aria-describedby="accentColorHint">
+          <input id="accentHex" type="text" inputmode="text" spellcheck="false" maxlength="7" aria-label="强调色 HEX" data-en-label="Accent color hex" aria-describedby="accentColorHint" autocomplete="off">
+        </div>
+        <p class="hint" id="accentColorHint" data-en="Buttons and selection">按钮和选中项</p>
+      </div>
+    </div>
+    <div class="appearance-sample" aria-hidden="true">
+      <span data-en="Selected item">选中项</span>
+      <span class="button button--primary" data-en="Primary button">主要按钮</span>
+    </div>
+    <p class="hint" id="appearanceStatus" role="status"></p>
+    <div class="actions appearance-actions">
+      <button class="button" id="appearanceReset" type="button" data-en="Reset">恢复默认</button>
+      <button class="button button--primary" id="appearanceClose" type="button" data-en="Done">完成</button>
+    </div>
+  </dialog>
+
+  <dialog class="confirm-dialog" id="controlDialog" aria-labelledby="controlTitle" aria-describedby="controlWarning">
+    <h2 id="controlTitle"></h2>
+    <p class="confirm-warning" id="controlWarning"></p>
+    <dl class="details confirm-details">
+      <div><dt data-en="Device">设备</dt><dd id="controlDevice"></dd></div>
+      <div><dt data-en="Target">目标</dt><dd id="controlTarget"></dd></div>
+    </dl>
+    <div class="actions dialog-actions">
+      <button class="button" id="cancelControl" type="button" autofocus data-en="Cancel">取消</button>
+      <button class="button button--danger" id="confirmControl" type="button" data-en="Confirm">确认</button>
+    </div>
+  </dialog>
+</body>
+</html>
