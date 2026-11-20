@@ -38,6 +38,10 @@ npm run build
 
 ADB Shell 能执行用户输入的 Android 指令，并非只读沙箱。请理解命令后再运行。停止接收输出不能保证结束设备上的后台进程；停止 Fastboot 查询会关闭连接以丢弃滞后的响应。
 
+## 鸣谢
+
+感谢 yume-chan 和 ya-webadb 的贡献者。工具箱的浏览器 ADB 连接与终端使用了该项目提供的 WebUSB 和 ADB 实现。 [ya-webadb 源码](https://github.com/yume-chan/ya-webadb)
+
 ## 许可
 
 本仓库公开源码采用 MIT。WebADB 分发物的原始许可及版权声明在 site/vendor/web-adb.LICENSE.txt 中保留。Color Archive 名称和标识不表示对第三方部署的背书。私有模块不属于本仓库或其许可范围。
